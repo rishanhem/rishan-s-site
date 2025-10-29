@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rishan Hemrajani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fg: #101010;
+      --accent: #2f66f5;
+      --highlight: rgba(47, 102, 245, 0.18);
+      --muted: rgba(16, 16, 16, 0.64);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #ffffff;
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      width: 100%;
+      padding: 32px clamp(24px, 8vw, 72px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand a {
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 1.05rem;
+      color: var(--fg);
+      text-decoration: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: clamp(18px, 3vw, 32px);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--fg);
+      padding-bottom: 4px;
+      border-bottom: 2px solid transparent;
+      transition: border-color 160ms ease;
+    }
+
+    nav a:hover,
+    nav a:focus-visible,
+    nav a[aria-current="page"] {
+      border-color: var(--accent);
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: clamp(48px, 12vw, 120px);
+    }
+
+    .hero {
+      max-width: 1120px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: clamp(48px, 8vw, 140px);
+      align-items: center;
+    }
+
+    .intro {
+      display: grid;
+      gap: 32px;
+    }
+
+    h1 {
+      font-size: clamp(3.1rem, 6.4vw, 4.6rem);
+      font-weight: 700;
+      line-height: 1.02;
+      letter-spacing: -0.055em;
+      max-width: 640px;
+    }
+
+    .highlight {
+      display: inline;
+      background: linear-gradient(118deg, var(--highlight), transparent 70%);
+      border-radius: 10px;
+      padding: 2px 8px;
+      margin: 0 4px;
+      white-space: nowrap;
+    }
+
+    p {
+      font-size: clamp(1.2rem, 2.4vw, 1.45rem);
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 560px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 22px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .profile-photo {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .profile-photo img {
+      width: clamp(320px, 34vw, 420px);
+      height: clamp(360px, 38vw, 480px);
+      object-fit: cover;
+      border-radius: 30px;
+      box-shadow: 0 32px 90px rgba(16, 16, 16, 0.16);
+    }
+
+    @media (max-width: 900px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      main {
+        padding: 64px 32px 80px;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 56px;
+        text-align: center;
+      }
+
+      .intro {
+        align-items: center;
+      }
+
+      .highlight {
+        display: inline-block;
+      }
+
+      p {
+        max-width: none;
+      }
+
+      .profile-photo {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand"><a href="index.html">Rishan Hemrajani</a></div>
+    <nav>
+      <ul>
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="gallery.html">Gallery &amp; Press</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="intro">
+        <h1>Hi, I’m Rishan, a <span class="highlight">builder</span> and an <span class="highlight">activist</span>.</h1>
+        <p>I’m most alive when I'm playing my favorite board and card games (shoutout Catan and Poker!) or building a new project :)</p>
+      </div>
+      <div class="profile-photo">
+        <img src="assets/rishan.jpg" alt="Portrait of Rishan Hemrajani smiling" loading="lazy">
+      </div>
+    </section>
+  </main>
+</body>
+</html>

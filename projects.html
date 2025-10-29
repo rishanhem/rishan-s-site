@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects · Rishan Hemrajani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fg: #101010;
+      --muted: rgba(16, 16, 16, 0.66);
+      --accent: #2f66f5;
+      --bg: #ffffff;
+      --shadow: rgba(16, 16, 16, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 32px clamp(24px, 8vw, 72px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand a {
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 1.05rem;
+      color: var(--fg);
+      text-decoration: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: clamp(18px, 3vw, 32px);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--fg);
+      padding-bottom: 4px;
+      border-bottom: 2px solid transparent;
+      transition: border-color 160ms ease;
+    }
+
+    nav a:hover,
+    nav a:focus-visible,
+    nav a[aria-current="page"] {
+      border-color: var(--accent);
+    }
+
+    main {
+      flex: 1;
+      padding: 0 clamp(24px, 8vw, 72px) clamp(80px, 12vw, 160px);
+    }
+
+    .intro {
+      max-width: 720px;
+      margin-bottom: clamp(48px, 6vw, 72px);
+    }
+
+    .intro h1 {
+      font-size: clamp(2.6rem, 5.4vw, 3.7rem);
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+
+    .intro p {
+      margin-top: 20px;
+      font-size: clamp(1.05rem, 2.3vw, 1.25rem);
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .projects-grid {
+      display: grid;
+      gap: clamp(36px, 5vw, 56px);
+    }
+
+    .project-card {
+      display: grid;
+      grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
+      gap: clamp(28px, 5vw, 44px);
+      align-items: center;
+    }
+
+    .project-image {
+      position: relative;
+      overflow: hidden;
+      border-radius: 26px;
+      box-shadow: 0 24px 60px var(--shadow);
+    }
+
+    .project-image img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      object-fit: cover;
+    }
+
+    .project-image.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      background: var(--placeholder-bg, linear-gradient(135deg, #edf1ff, #f8f9fb));
+      border: 1px dashed rgba(47, 102, 245, 0.35);
+      overflow: hidden;
+    }
+
+    .project-image.placeholder span {
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-align: center;
+      padding: 0 12px;
+    }
+
+    .project-content {
+      display: grid;
+      gap: 16px;
+    }
+
+    .project-content h2 {
+      font-size: clamp(1.6rem, 3vw, 2rem);
+      letter-spacing: -0.02em;
+    }
+
+    .project-content p {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .more {
+      display: none;
+      font-size: 0.98rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .project-card[data-expanded="true"] .more {
+      display: block;
+    }
+
+    .toggle {
+      justify-self: start;
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(47, 102, 245, 0.3);
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .toggle:hover,
+    .toggle:focus-visible {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 12, 16, 0.72);
+      backdrop-filter: blur(14px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: clamp(32px, 6vw, 72px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease;
+      z-index: 100;
+    }
+
+    .modal.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-dialog {
+      background: #ffffff;
+      border-radius: 28px;
+      max-width: 960px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 32px 90px rgba(10, 12, 16, 0.28);
+      display: grid;
+      gap: clamp(28px, 3vw, 40px);
+      padding: clamp(32px, 5vw, 52px);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .modal-header h2 {
+      font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+      letter-spacing: -0.02em;
+    }
+
+    .modal-close {
+      border: none;
+      background: rgba(47, 102, 245, 0.1);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .modal-content p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .modal-content h3 {
+      font-size: 1.18rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+
+    .modal-gallery {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .modal-gallery img {
+      width: 100%;
+      height: 100%;
+      min-height: 180px;
+      object-fit: cover;
+      border-radius: 18px;
+      box-shadow: 0 16px 38px rgba(10, 12, 16, 0.12);
+    }
+
+    .modal-gallery video {
+      width: 100%;
+      height: auto;
+      max-height: 320px;
+      border-radius: 18px;
+      box-shadow: 0 16px 38px rgba(10, 12, 16, 0.12);
+      object-fit: cover;
+      background: #000;
+    }
+
+    .impact-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .impact-list li {
+      list-style: none;
+      padding-left: 18px;
+      position: relative;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .impact-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .press-links {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .press-links a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .press-links a::after {
+      content: '↗';
+      font-size: 0.95rem;
+    }
+
+    footer {
+      padding: 40px clamp(24px, 8vw, 72px);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(16, 16, 16, 0.48);
+    }
+
+    @media (max-width: 960px) {
+      .project-card {
+        grid-template-columns: 1fr;
+      }
+
+      .project-image {
+        max-width: 520px;
+        justify-self: center;
+      }
+
+      .project-content {
+        justify-items: start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      nav ul {
+        gap: 18px;
+      }
+
+      main {
+        padding: 0 24px 80px;
+      }
+
+      .project-content {
+        justify-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand"><a href="index.html">Rishan Hemrajani</a></div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html" aria-current="page">Projects</a></li>
+        <li><a href="gallery.html">Gallery &amp; Press</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="intro">
+      <h1>Projects I’m building and championing.</h1>
+      <p>I care about building systems that make life easier for communities. That includes grassroots public services, research labs, and scrappy product experiments.</p>
+    </section>
+    <section class="projects-grid">
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image">
+          <img src="assets/libraryphotos/IMG_6637.jpg" alt="Launch day display of Fort Bend Library of Things devices and signage">
+        </figure>
+        <div class="project-content">
+          <h2>Fort Bend Library of Things</h2>
+          <p>I co-founded the Fort Bend Library of Things after pitching it to the county director. I now help run the program, keep 1,000+ donated items moving through 12 branches, and support a county team focused on community access.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-fort-bend" aria-haspopup="dialog" aria-controls="modal-fort-bend">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image">
+          <img src="assets/RobotRemote/Photos/CMUTestingCenter2.png" alt="Rishan testing RobotRemote with a robotic arm at Carnegie Mellon">
+        </figure>
+        <div class="project-content">
+          <h2>Momentum Robotics Lab · Carnegie Mellon</h2>
+          <p>RobotRemote turns any iPhone into a precise teleoperation controller. I built the ARKit + Swift networking stack, the Blender twin, and the mobile interface so researchers can steer robots with better fidelity than old GPS or gyroscope inputs.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-momentum" aria-haspopup="dialog" aria-controls="modal-momentum">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image">
+          <img src="assets/utml/ec57ceda-d0db-4200-8245-151681bba8d6.JPG" alt="Rishan presenting LDOS research findings at UT Austin">
+        </figure>
+        <div class="project-content">
+          <h2>Learning Directed OS · UT Austin</h2>
+          <p>I joined UT Austin’s LDOS team to train Perceptron and KNN models that predict fast vs. slow kernel tasks. My models hit 92% accuracy and became the reference point for the high school cohort.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-ldos" aria-haspopup="dialog" aria-controls="modal-ldos">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image">
+          <img src="assets/sciencefair/cover.jpg" alt="Rishan presenting perovskite solar cell research at Houston SEF">
+        </figure>
+        <div class="project-content">
+          <h2>Houston Science &amp; Engineering Fair</h2>
+          <p>I took 3rd in Energy &amp; Transportation for work on non-toxic perovskite solar cells. I experimented with quantum dot buffer layers to boost stability and earned recognition from the Dilorio Foundation.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-hsef" aria-haspopup="dialog" aria-controls="modal-hsef">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image">
+          <img src="assets/mtsi/cover.JPG" alt="Team members testing the InSight smart cart prototype">
+        </figure>
+        <div class="project-content">
+          <h2>M&amp;TSI · InSight Smart Cart</h2>
+          <p>At Penn’s M&amp;TSI, my team built InSight: a mountable smart cart assistant that gives seniors magnification, translation, and health monitoring tools while they shop.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-mtsi" aria-haspopup="dialog" aria-controls="modal-mtsi">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image placeholder" style="--placeholder-bg: linear-gradient(135deg, #eef2ff, #f6f9ff);">
+          <span>Finance Research</span>
+        </figure>
+        <div class="project-content">
+          <h2>Financial Research · George Mason University</h2>
+          <p>I worked with Prof. Jiasun Li to study 600 open-source blockchain projects, digging into governance and funding patterns that keep volunteer communities healthy.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-gmu" aria-haspopup="dialog" aria-controls="modal-gmu">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image placeholder" style="--placeholder-bg: linear-gradient(135deg, #fff2e0, #ffe0b2);">
+          <span>ChemE Research</span>
+        </figure>
+        <div class="project-content">
+          <h2>Texas A&amp;M Kingsville · Separation Research</h2>
+          <p>At Texas A&amp;M Kingsville, I simulated acetone–water separation using extraction plus distillation and shared the results at the U.S. Department of Education’s MSEIP Conference.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-tamuk" aria-haspopup="dialog" aria-controls="modal-tamuk">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image placeholder" style="--placeholder-bg: linear-gradient(135deg, #fce4ec, #f8bbd0);">
+          <span>Digital Ops</span>
+        </figure>
+        <div class="project-content">
+          <h2>Take A Pain Check · Webmaster</h2>
+          <p>I kept Take A Pain Check’s digital platforms humming: uploading content every two weeks, growing traffic past 1,000 visits a month, and helping raise more than $10K from sponsors.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-tapc" aria-haspopup="dialog" aria-controls="modal-tapc">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image">
+          <img src="assets/vexclub/cover.jpg" alt="Jordan HS VEX club members building robots during camp">
+        </figure>
+        <div class="project-content">
+          <h2>Jordan HS VEX Club · Treasurer</h2>
+          <p>As VEX club treasurer, I helped start our booster program, raised over $35K for parts and travel, launched seven sister teams, and ran summer camps that gave younger students a first shot at robotics.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-vexclub" aria-haspopup="dialog" aria-controls="modal-vexclub">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image placeholder" style="--placeholder-bg: linear-gradient(135deg, #e0f2ff, #b3e5fc);">
+          <span>NASA HAS</span>
+        </figure>
+        <div class="project-content">
+          <h2>NASA High School Aerospace Scholars</h2>
+          <p>During NASA’s High School Aerospace Scholars program, I designed cargo landers, crew capsules, and HALO modules while iterating on feedback from NASA engineers.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-nasa" aria-haspopup="dialog" aria-controls="modal-nasa">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image placeholder" style="--placeholder-bg: linear-gradient(135deg, #f3e5f5, #e1bee7);">
+          <span>NSLI-Y Scholar</span>
+        </figure>
+        <div class="project-content">
+          <h2>U.S. Department of State · V-NSLIY Scholar</h2>
+          <p>I spent a semester in the State Department’s Virtual NSLI-Y program learning Mandarin, working on cultural projects, and exploring how food can bridge communities.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-nsliy" aria-haspopup="dialog" aria-controls="modal-nsliy">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image">
+          <img src="assets/tsa/cover.JPG" alt="Jordan High TSA leadership team after nationals">
+        </figure>
+        <div class="project-content">
+          <h2>Jordan High TSA</h2>
+          <p>As TSA president, I led 250+ members, ran a seven-person exec team, raised $40K per year, and built a mentorship system that tripled our competitive success.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-tsa" aria-haspopup="dialog" aria-controls="modal-tsa">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image">
+          <img src="https://images.unsplash.com/photo-1516972810927-80185027ca84?auto=format&fit=crop&w=1200&q=80" alt="Librarian leading a STEM workshop for students">
+        </figure>
+        <div class="project-content">
+          <h2>Fulshear Branch Library</h2>
+          <p>I’m one of nine student advisors guiding the Fulshear Branch Library. I lead Arduino workshops for local students and curate inclusive displays for cultural heritage months.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-fulshear" aria-haspopup="dialog" aria-controls="modal-fulshear">Learn more</button>
+        </div>
+      </article>
+
+      <article class="project-card" data-expanded="false">
+        <figure class="project-image">
+          <img src="assets/19697z/cover.jpg" alt="Team 19697Z robot ready for finals">
+        </figure>
+        <div class="project-content">
+          <h2>VEX Robotics Team 19697Z</h2>
+          <p>I lead coding for Team 19697Z, building PID and odometry systems that boosted our autonomous performance by 135% while mentoring sister teams to reach Worlds.</p>
+          <button class="toggle modal-trigger" type="button" data-modal-target="modal-vex" aria-haspopup="dialog" aria-controls="modal-vex">Learn more</button>
+        </div>
+      </article>
+
+    </section>
+  </main>
+  <div class="modal" id="modal-fort-bend" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-fort-bend-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-fort-bend-title">Fort Bend Library of Things</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>LibraryOfThings gives every resident across Fort Bend County free access to shared technologies, tools, games, and emergency supplies. I proposed the initiative directly to Library Director Roosevelt Weeks, co-founded the program as a high school student, and now co-direct vision, partnerships, and operations alongside county leadership.</p>
+        <p>I lead an eight-person team of administrators and county officials to integrate the LibraryOfThings into 12 branch libraries, design logistics, and build donation pipelines that keep the catalog responsive to community requests.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="assets/libraryphotos/IMG_9940.JPG" alt="Fort Bend Library of Things launch table with devices and signage">
+        <img src="assets/libraryphotos/IMG_9605.JPG" alt="Fort Bend Library of Things team with donated tools and equipment">
+        <img src="assets/libraryphotos/IMG_9942.JPG" alt="Library of Things display shelves with technology and games">
+        <img src="assets/libraryphotos/IMG_9953.JPG" alt="Residents exploring Library of Things items during community day">
+        <img src="assets/libraryphotos/IMG_2427.JPG" alt="Rishan presenting the Library of Things initiative to community members">
+        <img src="assets/libraryphotos/DSCN0754.jpg" alt="County officials and volunteers organizing Library of Things donations">
+        <img src="assets/libraryphotos/IMG_9943.JPG" alt="Close-up of Library of Things equipment ready for checkout">
+        <img src="assets/libraryphotos/gmbranch.png" alt="Graphic mockup highlighting Library of Things offerings at George Memorial branch">
+        <img src="assets/libraryphotos/IMG_2428.JPG" alt="Library of Things team capturing a launch day photo with signage">
+        <img src="assets/libraryphotos/IMG_6637.jpg" alt="Fort Bend County Library of Things display shelves stocked with board games and electronics">
+        <img src="assets/libraryphotos/IMG_9450.JPG" alt="Library of Things partners reviewing inventory bins together">
+        <img src="assets/libraryphotos/IMG_9450%20(1).JPG" alt="Another view of the Library of Things leadership team at the George Memorial branch">
+        <img src="assets/libraryphotos/IMG_9954.JPG" alt="Residents lining up to learn about the Library of Things borrowing process">
+        <img src="assets/libraryphotos/IMG_9944.JPG" alt="Catalog cards and checkout instructions for Library of Things items">
+      </div>
+      <div class="modal-content">
+        <h3>Impact highlights</h3>
+        <ul class="impact-list">
+          <li>Launched the first government-run Library of Things in Fort Bend County, serving 950K+ residents across 12 branches.</li>
+          <li>Collected and circulated more than 1,000 items, from Wi-Fi hotspots to board games, and opened a disaster relief collection after regional floods.</li>
+          <li>Designed outreach campaigns and systems that track demand, donation flow, and branch-level inventory in real time.</li>
+        </ul>
+      </div>
+      <div class="modal-content">
+        <h3>Recognition</h3>
+        <ul class="impact-list">
+          <li>Letter of Recognition from U.S. Senator John Cornyn.</li>
+          <li>Distinguished Service Award from U.S. Representative Troy Nehls.</li>
+          <li>Certificates of Recognition from Texas House Rep. Matt Morgan and Texas Senator Joan Huffman.</li>
+          <li>Certificate of Recognition from Fort Bend County Commissioner Dexter McCoy.</li>
+          <li>Above &amp; Beyond Recognition from Katy Mayor Thiele.</li>
+        </ul>
+      </div>
+      <div class="modal-content">
+        <h3>Press coverage</h3>
+        <ul class="press-links">
+          <li><a href="https://www.houstonpublicmedia.org/articles/news/fort-bend/2025/08/26/529534/it-reduces-the-barriers-to-access-katy-isd-seniors-launch-library-of-things-in-fort-bend/" target="_blank" rel="noreferrer noopener">NPR Houston Public Media</a></li>
+          <li><a href="https://drive.google.com/file/d/1S7s7Ydge-znHJTSOUeyqfPlKf9Bd6pmA/view?usp=sharing" target="_blank" rel="noreferrer noopener">NPR News 88.7 radio feature</a></li>
+          <li><a href="https://youtu.be/rsPsecdeUrE?si=LVGmgHO46k0AyYll" target="_blank" rel="noreferrer noopener">CW39 · 10AM H-Town Live Interview</a></li>
+          <li><a href="https://drive.google.com/file/d/1IMu8hPPEGFDCTSVfqUH2JqAmthO_CcBr/view?usp=sharing" target="_blank" rel="noreferrer noopener">Katy Times Feature</a></li>
+          <li><a href="https://www.fbherald.com/community/around_the_bend/items-needed-for-new-library-of-things-collection/article_9cf6463d-dc23-4fbb-bb23-2a729e5fd17e.html" target="_blank" rel="noreferrer noopener">Fort Bend Herald Coverage</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-momentum" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-momentum-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-momentum-title">Momentum Robotics Lab · Carnegie Mellon</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>At Carnegie Mellon’s Momentum Robotics Lab, I lead RobotRemote, an ARKit-powered system that turns any iPhone into a high-fidelity teleoperation controller. By translating phone pose data into robot joint movements, we outperform legacy GPS and gyroscope approaches in accuracy and latency.</p>
+        <p>I architected the Swift networking stack, realistic Blender-based digital twin, and the mobile UI that lets remote operators see both their live motion and the robot’s response in real time.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="assets/RobotRemote/Photos/CMUTestingCenter.png" alt="RobotRemote setup inside Carnegie Mellon’s Momentum Robotics Lab">
+        <img src="assets/RobotRemote/Photos/CMUTestingCenter2.png" alt="Teleoperation testing bay with robot arm and monitoring screens">
+        <img src="assets/RobotRemote/Photos/connection-process.png" alt="RobotRemote connection flow showcasing pairing steps">
+        <img src="assets/RobotRemote/Photos/registration-process.png" alt="RobotRemote registration interface on iPhone">
+        <video src="assets/RobotRemote/Videos/RealLifeDemo1.MOV" controls playsinline aria-label="RobotRemote live teleoperation demo"></video>
+        <video src="assets/RobotRemote/Videos/BlenderPOCDemo.mov" controls playsinline aria-label="RobotRemote Blender proof-of-concept animation"></video>
+        <video src="assets/RobotRemote/Videos/RoboSuite%20Benchmark.mov" controls playsinline aria-label="RobotRemote benchmark inside RoboSuite environment"></video>
+        <video src="assets/RobotRemote/Videos/MujoCoDemo.mp4" controls playsinline aria-label="RobotRemote Mujoco simulation demo"></video>
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Engineered the RobotRemote prototype with Swift’s Network framework, streaming pose (x, y, z) and pitch/yaw/roll into a Blender-based robotic twin.</li>
+          <li>Designed an intuitive mobile interface that visualizes operator motion and arm response in near real time.</li>
+          <li>Secured IRB approval and am co-running HRI user studies to benchmark usability and precision against traditional control setups.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-ldos" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-ldos-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-ldos-title">Learning Directed OS · UT Austin</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>At UT Austin’s LDOS lab, I contributed to an NSF-funded effort exploring machine learning–optimized operating systems. Working under PhD candidate Aditya Tewari, I trained Perceptron and KNN models that predict optimal kernel scheduling decisions.</p>
+        <p>My models reached 92% accuracy with strong recall and F1 scores, becoming the benchmark among high school researchers and informing the next wave of large-scale model integration.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="assets/utml/IMG_9129.jpg" alt="UT Austin LDOS cohort reviewing scheduling models">
+        <img src="assets/utml/IMG_9136.jpg" alt="Rishan with UT LDOS research team on presentation day">
+        <img src="assets/utml/ec57ceda-d0db-4200-8245-151681bba8d6.JPG" alt="Whiteboard notes from LDOS kernel optimization session">
+        <video src="assets/utml/perceptron.mp4" controls playsinline aria-label="Perceptron model demo for LDOS task predictions"></video>
+        <video src="assets/utml/qlearning.mov" controls playsinline aria-label="Q-learning exploration applied to LDOS scheduling"></video>
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Implemented cross-validation pipelines to ensure clean train/test separation and robust generalization.</li>
+          <li>Delivered the most accurate kernel model in cohort, guiding future exploration into scaling LDOS with additional algorithms.</li>
+          <li>Collaborated on documentation so the team can port my workflow into production-ready schedulers.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-hsef" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-hsef-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-hsef-title">Houston Science &amp; Engineering Fair · Energy &amp; Transportation</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>I earned 3rd Place in the Energy &amp; Transportation category for optimizing non-toxic perovskite solar cells with quantum dot buffer layers, research focused on improving charge transport while preserving sustainability.</p>
+        <p>The project combined simulation, lab testing, and materials analysis to validate efficiency gains, and received a $100 scholarship from the Dilorio Foundation for impact potential.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="assets/sciencefair/cover.jpg" alt="Rishan presenting at the Houston Science & Engineering Fair">
+        <img src="assets/sciencefair/IMG_8206.JPG" alt="Poster session with judges reviewing the perovskite project">
+        <img src="assets/sciencefair/IMG_6004.jpg" alt="Close-up of the solar cell prototype on display">
+        <img src="assets/sciencefair/IMG_6008.jpg" alt="Rishan standing next to the research board">
+        <img src="assets/sciencefair/IMG_5996.jpg" alt="Testing setup for quantum dot buffer layer integration">
+        <img src="assets/sciencefair/bddfa414-f0a4-465d-b3b7-bb89e12b3f4a.JPG" alt="Award photo from the Houston Science & Engineering Fair">
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Designed a quantum dot buffer integration strategy that enhanced stability without relying on toxic lead compounds.</li>
+          <li>Built optimization scripts to model efficiency improvements across varying incident light conditions.</li>
+          <li>Distributed findings to fellow competitors and judges via open-access documentation to encourage greener photovoltaics.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-mtsi" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-mtsi-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-mtsi-title">University of Pennsylvania M&amp;TSI · InSight Smart Cart</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>During Penn’s Management &amp; Technology Summer Institute, I co-led the design of InSight, a mountable shopping cart assistant that gives seniors real-time magnification, translation, navigation, and health monitoring support.</p>
+        <p>We paired Raspberry Pi hardware, tactile input buttons, and a software pipeline that streams accessibility features directly to the cart experience.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="assets/mtsi/cover.JPG" alt="InSight smart cart demoed during Penn M&amp;TSI">
+        <img src="assets/mtsi/DSCN0030.JPG" alt="Hardware team wiring the InSight control module">
+        <img src="assets/mtsi/DSCN0265.JPG" alt="Accessibility testing inside the Penn Engineering lab">
+        <img src="assets/mtsi/IMG_4364.jpg" alt="User interface sketches for InSight">
+        <img src="assets/mtsi/DSCN0019.JPG" alt="Mountable attachment concept on the cart frame">
+        <img src="assets/mtsi/IMG_8545.jpg" alt="Rishan presenting InSight to faculty reviewers">
+        <video src="assets/mtsi/IMG_8801.MOV" muted playsinline controls></video>
+        <video src="assets/mtsi/IMG_8914.MOV" muted playsinline controls></video>
+        <video src="assets/mtsi/IMG_8883.MOV" muted playsinline controls></video>
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Integrated tactile controls with Raspberry Pi hardware to trigger magnification, language translation, and vitals checks.</li>
+          <li>Crafted a complete go-to-market and financial model covering value proposition, marketing, and unit economics.</li>
+          <li>Presented prototype and business case to Wharton and Penn Engineering faculty, demonstrating technical feasibility and commercialization path.</li>
+        </ul>
+      </div>
+      <div class="modal-content">
+        <h3>Resources</h3>
+        <ul class="press-links">
+          <li><a href="https://devpost.com/software/insight-1yf9or?_gl=1*7kohhv*_gcl_au*MTkxMzkzODcwNy4xNzUyODUyMDg0*_ga*MTcxNDc5MDQwNi4xNzUyODUyMDg0*_ga_0YHJK3Y10M*czE3NTQxMTUyMTUkbzEzJGcxJHQxNzU0MTE1MjE5JGo1NiRsMCRoMA.." target="_blank" rel="noreferrer noopener">InSight on Devpost</a></li>
+          <li><a href="https://docs.google.com/document/d/1_-fcW6VX66CpaQsFJfynyi2mIBXxT3WbdlLYgDOmkpk/edit?usp=sharing" target="_blank" rel="noreferrer noopener">Go-To-Market Plan</a></li>
+          <li><a href="https://docs.google.com/spreadsheets/d/1O0b6EY3qv27GHOnI9WKnl1iVYCTzCLVy/edit?usp=sharing&ouid=116784600347774607063&rtpof=true&sd=true" target="_blank" rel="noreferrer noopener">Financial Model</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-gmu" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-gmu-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-gmu-title">Financial Research Intern · George Mason University</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>Worked with Prof. Jiasun Li to study 600 blockchain-based open-source projects on GitHub, identifying the success factors that keep volunteer communities engaged over time.</p>
+        <p>Our findings, published in the GMU Journal of Student-Staff Research, highlighted how governance, funding, and community response predict sustainability.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80" alt="Data visualizations on financial research dashboard">
+        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80" alt="Researcher analyzing blockchain metrics">
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Pulled large-scale contribution data via Google BigQuery, categorizing each project by funding type, governance, and mission.</li>
+          <li>Determined that community-driven governance plus high-utility use cases (L2 networks, exchanges) correlated with the healthiest maintenance rates.</li>
+          <li>Shared reproducible notebooks so other researchers can re-run or extend the analysis.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-tamuk" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-tamuk-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-tamuk-title">Texas A&amp;M Kingsville · Separation Research</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>Simulated the separation of a 50/50 wt% acetone-water mixture using methyl isobutyl ketone (MIBK) as the extracting agent, pairing liquid-liquid extraction with DSTWU and RadFrac distillation models.</p>
+        <p>The work supported industrial purification scenarios requiring high-purity feedstock and was selected for presentation at the U.S. Department of Education MSEIP Conference.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80" alt="Chemical engineering lab equipment">
+        <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1200&q=80" alt="Distillation column schematic on a whiteboard">
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Modeled both DSTWU and rigorous RadFrac columns to compare purity, recovery, and energy tradeoffs.</li>
+          <li>Optimized solvent ratios and tray counts to meet industrial-grade purity thresholds.</li>
+          <li>Documented the workflow so partner labs can replicate the two-step approach.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-tapc" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-tapc-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-tapc-title">Take A Pain Check · Webmaster</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>Managed the digital footprint for Take A Pain Check, a chronic illness advocacy nonprofit, by building the website, publishing biweekly videos, and maintaining analytics across YouTube and Instagram.</p>
+        <p>The platform reached 1,000+ monthly visits, and sponsor outreach campaigns brought in $10K+ from partners including Pfizer.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="https://images.unsplash.com/photo-1488722796624-0aa6f1bb6399?auto=format&fit=crop&w=1200&q=80" alt="Web designer updating a nonprofit website">
+        <img src="https://images.unsplash.com/photo-1522199992901-9e1e0d0bc1c4?auto=format&fit=crop&w=1200&q=80" alt="Social media analytics dashboard on a laptop">
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Built a custom CMS workflow to keep video and blog updates consistent for caregivers and patients.</li>
+          <li>Monitored growth to 1k+ Instagram followers and 700+ YouTube subscribers through content cadence experiments.</li>
+          <li>Coordinated sponsor pitches and reporting to maintain $10K+ in annual support.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-vexclub" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-vexclub-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-vexclub-title">Jordan HS VEX Robotics Club · Treasurer</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>As Treasurer, I helped launch the VEX parent booster club, raised $35K+ for parts and travel, and stood up seven new sister teams so more students could experience competitive robotics.</p>
+        <p>I also organized two three-day summer camps for 24+ middle school students, introducing them to the engineering design process before joining our pipeline.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="assets/vexclub/cover.jpg" alt="Jordan HS VEX club kicking off a build session">
+        <img src="assets/vexclub/IMG_1218.jpg" alt="Mentors supporting teams during practice">
+        <img src="assets/vexclub/IMG_1206.jpg" alt="Younger students learning drivetrain basics at camp">
+        <img src="assets/vexclub/IMG_3192.jpg" alt="Parents and booster members organizing equipment">
+        <img src="assets/vexclub/62996fa9-4f9b-43c9-bc05-df7ce431b480_Original%202.jpg" alt="Workshop tables lined with robotics parts">
+        <video src="assets/vexclub/IMG_5120.mp4" muted playsinline controls></video>
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Managed budget allocations for eight teams, balancing hardware upgrades with travel and competition fees.</li>
+          <li>Mentored three sister teams to state and two teams to VEX Worlds by sharing best practices from the flagship team.</li>
+          <li>Institutionalized fundraising playbooks that future treasurers can reuse.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-nasa" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-nasa-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-nasa-title">NASA High School Aerospace Scholars</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>Completed NASA’s HAS program, tackling engineering challenges for a lunar expedition by designing an autonomous cargo lander, crew capsule, and HALO (Habitation and Logistics Outpost).</p>
+        <p>Collaborated with NASA mentors for design reviews, incorporating feedback on mission architecture, redundancy, and resource planning.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1200&q=80" alt="Concept art of lunar lander and habitat modules">
+        <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1200&q=80" alt="Students collaborating on aerospace design sketches">
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Delivered four mission design packets covering propulsion, habitation, and logistics subsystems.</li>
+          <li>Integrated mentor feedback to iterate on CAD layouts and systems diagrams.</li>
+          <li>Strengthened cross-disciplinary planning by combining mechanical, electrical, and human factors considerations.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-nsliy" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-nsliy-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-nsliy-title">U.S. Department of State · Virtual NSLI-Y Scholar</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>Selected (15% acceptance) for the U.S. Department of State’s Virtual NSLI-Y program to study Mandarin with instructors from the Foreign Service Institute.</p>
+        <p>Immersed myself in Chinese culture by celebrating festivals, producing a final project on traditional cooking, and strengthening Mandarin speaking, pinyin, and literacy.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="https://images.unsplash.com/photo-1519682577862-22b62b24e493?auto=format&fit=crop&w=1200&q=80" alt="Students practicing Mandarin calligraphy during cultural exchange">
+        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80" alt="Traditional Mid-Autumn Festival celebration setup">
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Created a multimedia capstone on culinary traditions as a lens into cultural exchange.</li>
+          <li>Advanced conversational Mandarin and pinyin accuracy through weekly immersion sessions.</li>
+          <li>Built lasting relationships with globally minded peers preparing for diplomatic service.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-tsa" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-tsa-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-tsa-title">Jordan High School Technology Student Association</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>As President of Jordan High School TSA, I transformed our chapter into Texas’ top-performing program by scaling competitive wins, fundraising, and leadership pipelines so every student can compete without financial barriers.</p>
+        <p>We introduced peer mentorship, streamlined logistics across events, and captured the 2025 TSA National Championship in Technology Bowl, outperforming 49 state winners.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="assets/tsa/cover.JPG" alt="Jordan TSA team on stage after nationals">
+        <img src="assets/tsa/IMG_6578.JPG" alt="TSA leadership huddle before competition">
+        <img src="assets/tsa/IMG_7291.JPEG" alt="Peer mentorship session with underclassmen competitors">
+        <img src="assets/tsa/IMG_7391.JPEG" alt="Celebrating state qualifications with the team">
+        <img src="assets/tsa/IMG_7059.JPG" alt="TSA officers coordinating logistics during conference">
+        <video src="assets/tsa/tsanatswin.mov" muted playsinline controls></video>
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Scaled membership success: 90+ state qualifications and a 300% increase in podium finishes since 2022.</li>
+          <li>Raised $40K annually through sponsorships and grants, eliminating out-of-pocket travel costs.</li>
+          <li>Built a 7-person executive team with mentorship pipelines that sustain growth beyond my term.</li>
+          <li>Competed nationally and earned the 2025 TSA Technology Bowl Exam championship.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-fulshear" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-fulshear-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-fulshear-title">Fulshear Branch Library · Student Advisor</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>Selected as one of nine student advisors for the Fulshear Branch Library, I collaborate with librarians on youth programming, collections, and community feedback loops.</p>
+        <p>I designed and led an Arduino-based STEM workshop for 100+ elementary and middle school students and curated themed displays for Black History Month and Women’s History Month to broaden cultural representation.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1200&q=80" alt="Students participating in a hands-on electronics workshop">
+        <img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?auto=format&fit=crop&w=1200&q=80" alt="Library shelves featuring curated book displays">
+        <img src="https://images.unsplash.com/photo-1588075600110-cc0c0aa2bcc8?auto=format&fit=crop&w=1200&q=80" alt="Librarian facilitating a youth program">
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Provide ongoing feedback on youth services, tech lending, and community events for the Fulshear branch.</li>
+          <li>Led an Arduino engineering workshop that introduced 100+ students to hands-on coding.</li>
+          <li>Curated rotating displays celebrating Black History Month and Women’s History Month, boosting circulation of featured titles.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-vex" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-vex-title">
+    <div class="modal-dialog" tabindex="-1">
+      <div class="modal-header">
+        <h2 id="modal-vex-title">VEX Robotics Team 19697Z</h2>
+        <button class="modal-close" type="button" data-close>Close</button>
+      </div>
+      <div class="modal-content">
+        <p>As lead programmer for Team 19697Z, I build the motion algorithms that power our award-winning VEX robots. Through PID tuning, odometry, and sensor fusion, we boosted autonomous performance by 135% and secured top rankings statewide.</p>
+        <p>I also mentor seven sister team coders, spreading advanced motion control knowledge across our program.</p>
+      </div>
+      <div class="modal-gallery" aria-label="Project gallery">
+        <img src="assets/19697z/cover.jpg" alt="Team 19697Z robot ready for finals">
+        <img src="assets/19697z/IMG_5860.jpg" alt="Autonomous testing session in the lab">
+        <img src="assets/19697z/IMG_5648.jpg" alt="Tuning odometry with partner teams">
+        <img src="assets/19697z/IMG_7288.PNG" alt="RobotRemote-inspired telemetry dashboard for VEX">
+        <img src="assets/19697z/Untitled%206.PNG" alt="Path optimization storyboard for autonomous">
+        <video src="assets/19697z/IMG_3670.MOV" muted playsinline controls></video>
+        <video src="assets/19697z/IMG_7284.MOV" muted playsinline controls></video>
+        <video src="assets/19697z/RPReplay_Final1746661049.MP4" muted playsinline controls></video>
+      </div>
+      <div class="modal-content">
+        <h3>Highlights</h3>
+        <ul class="impact-list">
+          <li>Developed PID controllers and odometry pipelines using VEXCode V5 Pro and PROS, cutting drivetrain error dramatically.</li>
+          <li>Led strategy for autonomous and driver-control phases, integrating sensor fusion for reliable match play.</li>
+          <li>Mentored seven sister team programmers, helping raise competitiveness across our organization.</li>
+          <li>Emerged first in awards in Texas Region 3, won UIL 6A VEX Robotics State Championship, and qualified for VEX Worlds three times.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <footer>Built with curiosity · Updated frequently</footer>
+
+  <script>
+    const cards = document.querySelectorAll('.project-card');
+    const modalTriggers = document.querySelectorAll('.modal-trigger');
+    const body = document.body;
+
+    cards.forEach((card) => {
+      const button = card.querySelector('.toggle');
+      const more = card.querySelector('.more');
+
+      if (button && button.classList.contains('modal-trigger')) {
+        return;
+      }
+
+      button.addEventListener('click', () => {
+        const expanded = card.dataset.expanded === 'true';
+        card.dataset.expanded = String(!expanded);
+        button.setAttribute('aria-expanded', String(!expanded));
+        button.textContent = expanded ? 'Learn more' : 'Hide details';
+      });
+
+      button.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          button.click();
+        }
+      });
+    });
+
+    let activeModal = null;
+    let lastTrigger = null;
+
+    modalTriggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const targetId = trigger.getAttribute('data-modal-target');
+        const modal = document.getElementById(targetId);
+        if (!modal) return;
+        lastTrigger = trigger;
+        activeModal = modal;
+        modal.classList.add('is-visible');
+        modal.setAttribute('aria-hidden', 'false');
+        body.style.overflow = 'hidden';
+        const closeBtn = modal.querySelector('[data-close]');
+        if (closeBtn) {
+          closeBtn.focus();
+        }
+      });
+    });
+
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach((modal) => {
+      const closeButton = modal.querySelector('[data-close]');
+
+      const closeModal = () => {
+        modal.classList.remove('is-visible');
+        modal.setAttribute('aria-hidden', 'true');
+        body.style.overflow = '';
+        activeModal = null;
+        if (lastTrigger) {
+          lastTrigger.focus();
+        }
+      };
+
+      if (closeButton) {
+        closeButton.addEventListener('click', closeModal);
+      }
+
+      modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+
+      modal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeModal();
+        }
+      });
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && activeModal) {
+        const closeButton = activeModal.querySelector('[data-close]');
+        if (closeButton) {
+          closeButton.click();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

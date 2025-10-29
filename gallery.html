@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery &amp; Press · Rishan Hemrajani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fg: #101010;
+      --muted: rgba(16, 16, 16, 0.64);
+      --accent: #2f66f5;
+      --accent-soft: rgba(47, 102, 245, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #ffffff;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 32px clamp(24px, 8vw, 72px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand a {
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 1.05rem;
+      color: var(--fg);
+      text-decoration: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: clamp(18px, 3vw, 32px);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--fg);
+      padding-bottom: 4px;
+      border-bottom: 2px solid transparent;
+      transition: border-color 160ms ease;
+    }
+
+    nav a:hover,
+    nav a:focus-visible,
+    nav a[aria-current="page"] {
+      border-color: var(--accent);
+    }
+
+    main {
+      flex: 1;
+      padding: 0 clamp(24px, 8vw, 72px) clamp(96px, 14vw, 160px);
+      display: grid;
+      gap: clamp(64px, 8vw, 96px);
+    }
+
+    .intro {
+      max-width: 760px;
+    }
+
+    .intro h1 {
+      font-size: clamp(2.6rem, 5.3vw, 3.6rem);
+      line-height: 1.06;
+      letter-spacing: -0.045em;
+    }
+
+    .intro p {
+      margin-top: 20px;
+      font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    main section h2 {
+      font-size: clamp(1.8rem, 3.6vw, 2.4rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
+    }
+
+    .gallery-section {
+      display: grid;
+      gap: clamp(18px, 3vw, 28px);
+    }
+
+    .gallery-grid {
+      display: grid;
+      gap: clamp(18px, 2.6vw, 28px);
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .gallery-item {
+      border-radius: 26px;
+      box-shadow: 0 20px 60px rgba(16, 16, 16, 0.12);
+      display: grid;
+      cursor: zoom-in;
+      background: #fff;
+    }
+
+    .media-frame {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 26px 26px 0 0;
+      background: rgba(16, 16, 16, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .media-frame img,
+    .media-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #fff;
+    }
+
+    .gallery-caption {
+      padding: 18px 20px;
+      background: rgba(255, 255, 255, 0.92);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--muted);
+      border-radius: 0 0 26px 26px;
+    }
+
+    .press-list {
+      display: grid;
+      gap: 20px;
+    }
+
+    .press-item {
+      padding: 24px 28px;
+      border-radius: 22px;
+      border: 1px solid rgba(16, 16, 16, 0.08);
+      background: rgba(250, 250, 250, 0.9);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .press-item:hover,
+    .press-item:focus-within {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 50px rgba(16, 16, 16, 0.12);
+    }
+
+    .press-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 12px;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(16, 16, 16, 0.56);
+      margin-bottom: 12px;
+    }
+
+    .press-item h3 {
+      font-size: 1.2rem;
+      letter-spacing: -0.015em;
+      margin-bottom: 12px;
+    }
+
+    .press-item p {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .press-item a {
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .press-item a::after {
+      content: '↗';
+      font-size: 1rem;
+    }
+
+    .links-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      font-size: 0.98rem;
+    }
+
+    .links-list a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .links-list a::after {
+      content: '↗';
+      font-size: 0.95rem;
+    }
+
+    .recognition-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 7, 11, 0.82);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease;
+      z-index: 200;
+      padding: clamp(24px, 6vw, 72px);
+    }
+
+    .lightbox.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-dialog {
+      max-width: 1000px;
+      width: 100%;
+      background: #fff;
+      border-radius: 24px;
+      padding: clamp(18px, 2vw, 28px);
+      display: grid;
+      gap: 16px;
+    }
+
+    .lightbox-content img,
+    .lightbox-content video {
+      width: 100%;
+      height: auto;
+      border-radius: 18px;
+      object-fit: contain;
+    }
+
+    .lightbox-close {
+      justify-self: end;
+      border: none;
+      background: rgba(47, 102, 245, 0.12);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 8px 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .recognition-list li {
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .recognition-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    footer {
+      padding: 40px clamp(24px, 8vw, 72px);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(16, 16, 16, 0.48);
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      main {
+        padding: 0 24px 96px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand"><a href="index.html">Rishan Hemrajani</a></div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="gallery.html" aria-current="page">Gallery &amp; Press</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="intro">
+      <h1>Gallery moments and press highlights.</h1>
+      <p>A snapshot of the rooms I’m grateful to be in, from on-the-ground organizing to sharing the work with reporters and collaborators.</p>
+    </section>
+
+    <section class="gallery-section" aria-label="Library of Things">
+      <h2>Library of Things</h2>
+      <div class="gallery-grid">
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_9940.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_9940.JPG" alt="Launch day display table for the Fort Bend Library of Things with devices and signage">
+          </div>
+          <figcaption class="gallery-caption">Launch day spread at George Memorial Library introducing Fort Bend residents to the Library of Things catalog.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_9953.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_9953.JPG" alt="Community members gathering around the Library of Things tables">
+          </div>
+          <figcaption class="gallery-caption">Neighbors exploring new tech and tools they can borrow for free through the Library of Things program.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_9605.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_9605.JPG" alt="Rishan and Fort Bend County leaders celebrating Library of Things donations">
+          </div>
+          <figcaption class="gallery-caption">Celebrating a major donation drop with county leadership to expand the disaster relief collection.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_2427.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_2427.JPG" alt="Rishan presenting the Library of Things vision to community members">
+          </div>
+          <figcaption class="gallery-caption">Sharing the Library of Things roadmap with community partners and prospective donors.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_9942.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_9942.JPG" alt="Library of Things shelving with gadgets, games, and equipment">
+          </div>
+          <figcaption class="gallery-caption">Shelving inside the George Memorial branch stocked with Wi-Fi hotspots, projectors, games, and more.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_9944.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_9944.JPG" alt="Close-up of Library of Things inventory tags and packaging">
+          </div>
+          <figcaption class="gallery-caption">Inventory system we built so residents can browse, reserve, and track items across all 12 branches.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/DSCN0754.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/DSCN0754.jpg" alt="Volunteers organizing newly donated items for the Library of Things">
+          </div>
+          <figcaption class="gallery-caption">Coordinating logistics with volunteers to intake and prep hundreds of new items for circulation.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/gmbranch.png" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/gmbranch.png" alt="Graphic poster promoting Library of Things offerings at George Memorial Library">
+          </div>
+          <figcaption class="gallery-caption">Campaign graphic spotlighting the flagship Library of Things collection at George Memorial Library.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_2428.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_2428.JPG" alt="Library of Things co-founders celebrating the program launch inside the library">
+          </div>
+          <figcaption class="gallery-caption">Capturing the energy of launch day with our leadership team and community champions.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_6637.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_6637.jpg" alt="Library shelving filled with games, puzzles, and electronics for checkout">
+          </div>
+          <figcaption class="gallery-caption">Shelves of donation-driven items ready for circulation across Fort Bend County.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_9450.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_9450.JPG" alt="Library of Things leadership team reviewing bins of donated items">
+          </div>
+          <figcaption class="gallery-caption">Team huddle to prioritize which items head to each branch and disaster relief site.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_9450%20(1).JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_9450%20(1).JPG" alt="Rishan and collaborators posing with Library of Things signage">
+          </div>
+          <figcaption class="gallery-caption">Proud moment with collaborators after announcing the countywide rollout.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_9954.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_9954.JPG" alt="Residents gathered in line at the Library of Things kickoff event">
+          </div>
+          <figcaption class="gallery-caption">Community turnout at George Memorial Library to explore the new catalog.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/libraryphotos/IMG_9943.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/libraryphotos/IMG_9943.JPG" alt="Close-up of Library of Things equipment ready for checkout">
+          </div>
+          <figcaption class="gallery-caption">Preparing kits with clear labeling so families know what each item includes.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="gallery-section" aria-label="Momentum Robotics Lab">
+      <h2>Momentum Robotics Lab</h2>
+      <div class="gallery-grid">
+        <figure class="gallery-item" data-media="assets/RobotRemote/Photos/CMUTestingCenter.png" data-type="image">
+          <div class="media-frame">
+            <img src="assets/RobotRemote/Photos/CMUTestingCenter.png" alt="RobotRemote setup inside Carnegie Mellon’s Momentum Robotics Lab">
+          </div>
+          <figcaption class="gallery-caption">Testing RobotRemote with the CMU team inside the Momentum Robotics Lab.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/RobotRemote/Photos/CMUTestingCenter2.png" data-type="image">
+          <div class="media-frame">
+            <img src="assets/RobotRemote/Photos/CMUTestingCenter2.png" alt="Teleoperation testing bay with robot arm and monitoring screens">
+          </div>
+          <figcaption class="gallery-caption">Teleoperation bay where we benchmark RobotRemote against legacy controllers.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/RobotRemote/Photos/connection-process.png" data-type="image">
+          <div class="media-frame">
+            <img src="assets/RobotRemote/Photos/connection-process.png" alt="RobotRemote connection flow showcasing pairing steps">
+          </div>
+          <figcaption class="gallery-caption">Onboarding flow for connecting any iPhone to a robotic arm via RobotRemote.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/RobotRemote/Photos/registration-process.png" data-type="image">
+          <div class="media-frame">
+            <img src="assets/RobotRemote/Photos/registration-process.png" alt="RobotRemote registration interface on iPhone">
+          </div>
+          <figcaption class="gallery-caption">Registration UI we designed to keep teleoperation sessions secure.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/RobotRemote/Videos/RealLifeDemo1.MOV" data-type="video">
+          <div class="media-frame">
+            <video src="assets/RobotRemote/Videos/RealLifeDemo1.MOV" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Live RobotRemote demo showing the robotic arm mirroring phone movements.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/RobotRemote/Videos/RealLifeDemo2.MOV" data-type="video">
+          <div class="media-frame">
+            <video src="assets/RobotRemote/Videos/RealLifeDemo2.MOV" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Second-angle teleoperation test to validate latency and smoothness.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/RobotRemote/Videos/BlenderPOCDemo.mov" data-type="video">
+          <div class="media-frame">
+            <video src="assets/RobotRemote/Videos/BlenderPOCDemo.mov" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Blender proof-of-concept showing pose data animating the digital twin.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/RobotRemote/Videos/MujoCoDemo.mp4" data-type="video">
+          <div class="media-frame">
+            <video src="assets/RobotRemote/Videos/MujoCoDemo.mp4" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">RobotRemote operating within the MuJoCo simulation environment.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/RobotRemote/Videos/RoboSuite%20Demo%202.mov" data-type="video">
+          <div class="media-frame">
+            <video src="assets/RobotRemote/Videos/RoboSuite%20Demo%202.mov" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">RoboSuite run-through for benchmarking teleoperation accuracy.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/RobotRemote/Videos/RoboSuite%20Benchmark.mov" data-type="video">
+          <div class="media-frame">
+            <video src="assets/RobotRemote/Videos/RoboSuite%20Benchmark.mov" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Benchmark clip logging RobotRemote response curves inside RoboSuite.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="gallery-section" aria-label="UT Austin LDOS">
+      <h2>UT Austin LDOS</h2>
+      <div class="gallery-grid">
+        <figure class="gallery-item" data-media="assets/utml/ec57ceda-d0db-4200-8245-151681bba8d6.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/utml/ec57ceda-d0db-4200-8245-151681bba8d6.JPG" alt="Rishan and UT LDOS research team on presentation day">
+          </div>
+          <figcaption class="gallery-caption">LDOS cohort at UT Austin after presenting kernel scheduling models.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/utml/IMG_9129.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/utml/IMG_9129.jpg" alt="UT Austin LDOS cohort reviewing scheduling models">
+          </div>
+          <figcaption class="gallery-caption">Sharing Perceptron model results with fellow Academy for All researchers.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/utml/IMG_9136.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/utml/IMG_9136.jpg" alt="Rishan with UT LDOS research team on presentation day">
+          </div>
+          <figcaption class="gallery-caption">Snapshot with UT mentors after finishing the LDOS accuracy benchmarks.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/utml/perceptron.mp4" data-type="video">
+          <div class="media-frame">
+            <video src="assets/utml/perceptron.mp4" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Perceptron model walk-through used for LDOS kernel predictions.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/utml/qlearning.mov" data-type="video">
+          <div class="media-frame">
+            <video src="assets/utml/qlearning.mov" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Q-learning simulation that explored reinforcement signals in LDOS.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="gallery-section" aria-label="Houston Science &amp; Engineering Fair">
+      <h2>Houston Science &amp; Engineering Fair</h2>
+      <div class="gallery-grid">
+        <figure class="gallery-item" data-media="assets/sciencefair/cover.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/sciencefair/cover.jpg" alt="Rishan presenting the perovskite project at Houston SEF">
+          </div>
+          <figcaption class="gallery-caption">Presenting the quantum dot buffer research to judges.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/sciencefair/IMG_8206.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/sciencefair/IMG_8206.JPG" alt="Poster session with judges reviewing the project">
+          </div>
+          <figcaption class="gallery-caption">Answering questions about the solar cell optimization approach.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/sciencefair/IMG_6004.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/sciencefair/IMG_6004.jpg" alt="Close-up of the perovskite cell prototype on display">
+          </div>
+          <figcaption class="gallery-caption">Prototype cells showing the quantum dot buffer layer.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/sciencefair/IMG_6008.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/sciencefair/IMG_6008.jpg" alt="Rishan standing next to the research board">
+          </div>
+          <figcaption class="gallery-caption">Full board layout after final round feedback.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/sciencefair/IMG_5996.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/sciencefair/IMG_5996.jpg" alt="Testing setup for the perovskite samples">
+          </div>
+          <figcaption class="gallery-caption">Testing rig used to capture efficiency gains.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/sciencefair/bddfa414-f0a4-465d-b3b7-bb89e12b3f4a.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/sciencefair/bddfa414-f0a4-465d-b3b7-bb89e12b3f4a.JPG" alt="Award photo with judges">
+          </div>
+          <figcaption class="gallery-caption">Receiving the Energy &amp; Transportation award.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="gallery-section" aria-label="InSight at M&amp;TSI">
+      <h2>InSight · Penn M&amp;TSI</h2>
+      <div class="gallery-grid">
+        <figure class="gallery-item" data-media="assets/mtsi/cover.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/mtsi/cover.JPG" alt="InSight smart cart demo">
+          </div>
+          <figcaption class="gallery-caption">Demoing the InSight cart attachment to faculty.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/mtsi/DSCN0030.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/mtsi/DSCN0030.JPG" alt="Hardware team wiring controls">
+          </div>
+          <figcaption class="gallery-caption">Integrating tactile buttons with Raspberry Pi hardware.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/mtsi/DSCN0019.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/mtsi/DSCN0019.JPG" alt="Mounting bracket prototype">
+          </div>
+          <figcaption class="gallery-caption">Mounting concept to attach InSight onto any shopping cart.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/mtsi/IMG_4364.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/mtsi/IMG_4364.jpg" alt="UX exploration for InSight interface">
+          </div>
+          <figcaption class="gallery-caption">Mapping the accessibility-focused interface flow.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/mtsi/DSCN0265.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/mtsi/DSCN0265.JPG" alt="Team photo after final presentation">
+          </div>
+          <figcaption class="gallery-caption">Team InSight after presenting to Wharton and Penn Engineering faculty.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/mtsi/IMG_8801.MOV" data-type="video">
+          <div class="media-frame">
+            <video src="assets/mtsi/IMG_8801.MOV" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Live hardware test of InSight’s magnification feature.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/mtsi/IMG_8914.MOV" data-type="video">
+          <div class="media-frame">
+            <video src="assets/mtsi/IMG_8914.MOV" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Field test showing translation and vitals monitoring.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="gallery-section" aria-label="Jordan TSA">
+      <h2>Jordan TSA</h2>
+      <div class="gallery-grid">
+        <figure class="gallery-item" data-media="assets/tsa/cover.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/tsa/cover.JPG" alt="Jordan TSA team with medals">
+          </div>
+          <figcaption class="gallery-caption">National champions celebrating the Technology Bowl win.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/tsa/IMG_3218.JPG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/tsa/IMG_3218.JPG" alt="Mentorship breakout with underclassmen">
+          </div>
+          <figcaption class="gallery-caption">Mentorship pipeline in action during prep sessions.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/tsa/IMG_7391.JPEG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/tsa/IMG_7391.JPEG" alt="Team photo at state conference">
+          </div>
+          <figcaption class="gallery-caption">Taking over state with more than 90 qualifications.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/tsa/IMG_7932.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/tsa/IMG_7932.jpg" alt="Exec team handling logistics">
+          </div>
+          <figcaption class="gallery-caption">Coordinating travel and logistics for 250+ members.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/tsa/tsanatswin.mov" data-type="video">
+          <div class="media-frame">
+            <video src="assets/tsa/tsanatswin.mov" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Nationals stage moment when Jordan TSA took the title.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="gallery-section" aria-label="VEX Robotics 19697Z">
+      <h2>VEX Robotics 19697Z</h2>
+      <div class="gallery-grid">
+        <figure class="gallery-item" data-media="assets/19697z/cover.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/19697z/cover.jpg" alt="Team 19697Z at competition">
+          </div>
+          <figcaption class="gallery-caption">Robots staged for the UIL 6A VEX finals.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/19697z/IMG_5860.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/19697z/IMG_5860.jpg" alt="Testing autonomous routine">
+          </div>
+          <figcaption class="gallery-caption">Autonomous routines running through overnight tests.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/19697z/IMG_5648.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/19697z/IMG_5648.jpg" alt="Sensor tuning session">
+          </div>
+          <figcaption class="gallery-caption">Tuning odometry and sensor fusion with alliance partners.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/19697z/IMG_7288.PNG" data-type="image">
+          <div class="media-frame">
+            <img src="assets/19697z/IMG_7288.PNG" alt="Autonomous path visualization">
+          </div>
+          <figcaption class="gallery-caption">Path-planning visualizations during scouting meetings.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/19697z/IMG_3670.MOV" data-type="video">
+          <div class="media-frame">
+            <video src="assets/19697z/IMG_3670.MOV" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Match footage showcasing precise PID control.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/19697z/IMG_7284.MOV" data-type="video">
+          <div class="media-frame">
+            <video src="assets/19697z/IMG_7284.MOV" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Autonomous test with new odometry constants.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="gallery-section" aria-label="Jordan VEX Club">
+      <h2>Jordan VEX Club</h2>
+      <div class="gallery-grid">
+        <figure class="gallery-item" data-media="assets/vexclub/cover.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/vexclub/cover.jpg" alt="Jordan VEX club workshop">
+          </div>
+          <figcaption class="gallery-caption">Booster-backed workshop assembling robots for the season.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/vexclub/IMG_1218.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/vexclub/IMG_1218.jpg" alt="Mentor guiding students through drivetrain build">
+          </div>
+          <figcaption class="gallery-caption">Mentors coaching new teams during summer camp.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/vexclub/IMG_1206.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/vexclub/IMG_1206.jpg" alt="Students cutting aluminum parts">
+          </div>
+          <figcaption class="gallery-caption">Hands-on machining practice for fifth through eighth graders.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/vexclub/IMG_3192.jpg" data-type="image">
+          <div class="media-frame">
+            <img src="assets/vexclub/IMG_3192.jpg" alt="Parents and students organizing kits">
+          </div>
+          <figcaption class="gallery-caption">Booster team sorting kits for seven sister teams.</figcaption>
+        </figure>
+        <figure class="gallery-item" data-media="assets/vexclub/IMG_5120.mp4" data-type="video">
+          <div class="media-frame">
+            <video src="assets/vexclub/IMG_5120.mp4" muted playsinline></video>
+          </div>
+          <figcaption class="gallery-caption">Camp scrimmage that capped off our outreach program.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section aria-label="Press features">
+      <h2>Press coverage</h2>
+      <div class="press-list">
+        <article class="press-item">
+          <div class="press-meta">
+            <span>Houston Public Media</span>
+            <span>2025</span>
+          </div>
+          <h3>"It reduces the barriers to access": Katy ISD seniors launch LibraryOfThings</h3>
+          <p>NPR’s Houston Public Media and News 88.7 spotlighted how we built a government-backed Library of Things for Fort Bend County.</p>
+          <a href="https://www.houstonpublicmedia.org/articles/news/fort-bend/2025/08/26/529534/it-reduces-the-barriers-to-access-katy-isd-seniors-launch-library-of-things-in-fort-bend/" target="_blank" rel="noreferrer noopener">Read &amp; listen</a>
+        </article>
+
+        <article class="press-item">
+          <div class="press-meta">
+            <span>NPR News 88.7</span>
+            <span>2024</span>
+          </div>
+          <h3>Library of Things on NPR News 88.7</h3>
+          <p>Radio feature diving into how we stood up a county-backed Library of Things and what’s next for expansion.</p>
+          <a href="https://drive.google.com/file/d/1S7s7Ydge-znHJTSOUeyqfPlKf9Bd6pmA/view?usp=sharing" target="_blank" rel="noreferrer noopener">Listen to the feature</a>
+        </article>
+
+        <article class="press-item">
+          <div class="press-meta">
+            <span>CW39 Houston</span>
+            <span>2024</span>
+          </div>
+          <h3>Library of Things on 10AM H-Town Live</h3>
+          <p>TV interview about mobilizing donations, launching the disaster relief library, and making borrowing frictionless.</p>
+          <a href="https://youtu.be/rsPsecdeUrE?si=LVGmgHO46k0AyYll" target="_blank" rel="noreferrer noopener">Watch the interview</a>
+        </article>
+
+        <article class="press-item">
+          <div class="press-meta">
+            <span>Katy Times</span>
+            <span>2024</span>
+          </div>
+          <h3>Library of Things brings shared resources to Fort Bend</h3>
+          <p>Katy Times profiled our origin story, community partnerships, and the student leadership powering the initiative.</p>
+          <a href="https://drive.google.com/file/d/1IMu8hPPEGFDCTSVfqUH2JqAmthO_CcBr/view?usp=sharing" target="_blank" rel="noreferrer noopener">Read the article</a>
+        </article>
+
+        <article class="press-item">
+          <div class="press-meta">
+            <span>Fort Bend Herald</span>
+            <span>2024</span>
+          </div>
+          <h3>Items needed for new Library of Things collection</h3>
+          <p>Coverage calling on residents to donate equipment and supplies to help us expand the catalog across all branches.</p>
+          <a href="https://www.fbherald.com/community/around_the_bend/items-needed-for-new-library-of-things-collection/article_9cf6463d-dc23-4fbb-bb23-2a729e5fd17e.html" target="_blank" rel="noreferrer noopener">Read the story</a>
+        </article>
+      </div>
+    </section>
+
+    <section aria-label="Recognition">
+      <h2>Recognition</h2>
+      <ul class="recognition-list">
+        <li>Letter of Recognition from U.S. Senator John Cornyn.</li>
+        <li>Distinguished Service Award from U.S. Representative Troy Nehls.</li>
+        <li>Certificates of Recognition from Texas House Rep. Matt Morgan and Texas Senator Joan Huffman.</li>
+        <li>Certificate of Recognition from Fort Bend County Commissioner Dexter McCoy.</li>
+        <li>Above &amp; Beyond Recognition from Katy Mayor Thiele.</li>
+      </ul>
+    </section>
+
+    <section aria-label="Key Links">
+      <h2>Links</h2>
+      <ul class="links-list">
+        <li><a href="https://www.houstonpublicmedia.org/articles/news/fort-bend/2025/08/26/529534/it-reduces-the-barriers-to-access-katy-isd-seniors-launch-library-of-things-in-fort-bend/" target="_blank" rel="noreferrer noopener">NPR Houston Public Media feature</a></li>
+        <li><a href="https://drive.google.com/file/d/1S7s7Ydge-znHJTSOUeyqfPlKf9Bd6pmA/view?usp=sharing" target="_blank" rel="noreferrer noopener">NPR News 88.7 radio clip</a></li>
+        <li><a href="https://youtu.be/rsPsecdeUrE?si=LVGmgHO46k0AyYll" target="_blank" rel="noreferrer noopener">CW39 · 10AM H-Town Live interview</a></li>
+        <li><a href="https://drive.google.com/file/d/1IMu8hPPEGFDCTSVfqUH2JqAmthO_CcBr/view?usp=sharing" target="_blank" rel="noreferrer noopener">Katy Times story</a></li>
+        <li><a href="https://www.fbherald.com/community/around_the_bend/items-needed-for-new-library-of-things-collection/article_9cf6463d-dc23-4fbb-bb23-2a729e5fd17e.html" target="_blank" rel="noreferrer noopener">Fort Bend Herald coverage</a></li>
+        <li><a href="https://devpost.com/software/insight-1yf9or?_gl=1*7kohhv*_gcl_au*MTkxMzkzODcwNy4xNzUyODUyMDg0*_ga*MTcxNDc5MDQwNi4xNzUyODUyMDg0*_ga_0YHJK3Y10M*czE3NTQxMTUyMTUkbzEzJGcxJHQxNzU0MTE1MjE5JGo1NiRsMCRoMA.." target="_blank" rel="noreferrer noopener">InSight project on Devpost</a></li>
+        <li><a href="https://docs.google.com/document/d/1_-fcW6VX66CpaQsFJfynyi2mIBXxT3WbdlLYgDOmkpk/edit?usp=sharing" target="_blank" rel="noreferrer noopener">InSight Go-To-Market plan</a></li>
+        <li><a href="https://docs.google.com/spreadsheets/d/1O0b6EY3qv27GHOnI9WKnl1iVYCTzCLVy/edit?usp=sharing&ouid=116784600347774607063&rtpof=true&sd=true" target="_blank" rel="noreferrer noopener">InSight financial model</a></li>
+      </ul>
+    </section>
+  </main>
+  <footer>Built with curiosity · Updated frequently</footer>
+
+  <div class="lightbox" aria-hidden="true">
+    <div class="lightbox-dialog">
+      <button class="lightbox-close" type="button">Close</button>
+      <div class="lightbox-content"></div>
+    </div>
+  </div>
+
+  <script>
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const lightbox = document.querySelector('.lightbox');
+    const lightboxContent = document.querySelector('.lightbox-content');
+    const lightboxClose = document.querySelector('.lightbox-close');
+
+    const openLightbox = (src, type, altText) => {
+      lightboxContent.innerHTML = '';
+      if (type === 'video') {
+        const video = document.createElement('video');
+        video.src = src;
+        video.controls = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        lightboxContent.appendChild(video);
+      } else {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = altText;
+        lightboxContent.appendChild(img);
+      }
+      lightbox.classList.add('is-visible');
+      lightbox.setAttribute('aria-hidden', 'false');
+      lightboxClose.focus();
+    };
+
+    const closeLightbox = () => {
+      lightbox.classList.remove('is-visible');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxContent.innerHTML = '';
+    };
+
+    galleryItems.forEach((item) => {
+      const mediaSrc = item.getAttribute('data-media');
+      const mediaType = item.getAttribute('data-type');
+      const caption = item.querySelector('.gallery-caption')?.textContent || '';
+      const trigger = item.querySelector('.media-frame');
+
+      if (trigger && mediaSrc) {
+        trigger.addEventListener('click', () => openLightbox(mediaSrc, mediaType, caption));
+      }
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && lightbox.classList.contains('is-visible')) {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+</html>
